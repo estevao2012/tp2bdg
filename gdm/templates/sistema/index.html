@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+  {% if usuarios %}
+    <ul>
+    {% for usuario in usuarios %}
+        <li>
+          <a href="{% url 'sistema:projetos' usuario.id %}">
+            {{ usuario }}
+          </a>
+        </li>
+    {% endfor %}
+    </ul>
+  {% else %}
+    <p>Sem usuarios no momento</p>
+  {% endif %}
+
+{% endblock %}

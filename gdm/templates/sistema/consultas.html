@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+
+  {% if projeto.consulta_set %}
+    <ul>
+    {% for consulta in projeto.consulta_set.all %}
+        <li>
+          <!-- <a href="{% url 'sistema:projetos' projeto.id %}"> -->
+            {{ consulta }}
+          <!-- </a> -->
+        </li>
+    {% endfor %}
+    </ul>
+  {% else %}
+    <p>Sem consultas no momento</p>
+  {% endif %}
+
+{% endblock %}
