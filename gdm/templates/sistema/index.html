@@ -1,9 +1,7 @@
 {% extends "base.html" %}
 
-{% block content %}
-
+{% block sidebar %}
   {% if usuarios %}
-    <ul>
     {% for usuario in usuarios %}
         <li>
           <a href="{% url 'sistema:projetos' usuario.id %}">
@@ -11,9 +9,11 @@
           </a>
         </li>
     {% endfor %}
-    </ul>
   {% else %}
-    <p>Sem usuarios no momento</p>
-  {% endif %}
+    <li>Usuarios</li>
+  {% endif %} 
 
+{% endblock %}
+
+{% block content %}
 {% endblock %}

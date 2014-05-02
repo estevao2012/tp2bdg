@@ -1,17 +1,33 @@
 {% extends "base.html" %}
 
+{% block title-sidebar %}Projetos{% endblock %}
+
+{% block sidebar %}
+    {% if user %} 
+      {% for projeto in user.projeto_set.all %}
+          <li>
+            <a href="{% url 'sistema:consultas' projeto.id %}">
+              {{ projeto }}
+            </a>
+          </li>
+      {% endfor %} 
+    {% else %}
+      <li>Projetos</li>
+    {% endif %}
+{% endblock %}
+
 {% block content %}
-  {% if user %}
-    <ul>
-    {% for projeto in user.projeto_set.all %}
+  <div id="content">
+    <h2>Projetos {{ user.projeto_set.first }}</h2>
+    <div class="consultas">
+      {% for consulta in user.projeto_set.first.consulta_set.all %}
         <li>
-          <a href="{% url 'sistema:consultas' projeto.id %}">
-            {{ projeto }}
-          </a>
+        {{ consulta }}
         </li>
-    {% endfor %}
-    </ul>
-  {% else %}
-    <p>Sem projetos no momento</p>
-  {% endif %}
+      {% endfor %}
+      <div class="mapa">
+        MAPA
+      </div>
+    </div>
+  </div>
 {% endblock %}

@@ -10,6 +10,9 @@ class Projeto(models.Model):
     def __unicode__(self):
         return self.nome
 
+    class Meta:
+        ordering = ["pk"]
+
 
 class Consulta(models.Model):
     projeto = models.ForeignKey(Projeto)
