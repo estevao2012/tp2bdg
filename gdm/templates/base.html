@@ -7,7 +7,9 @@
         <link rel="stylesheet" type="text/css" href="{% static 'sistema/css/bootstrap.min.css' %}" />
         <link rel="stylesheet" type="text/css" href="{% static 'sistema/css/bootstrap-theme.min.css' %}" />
         <link rel="stylesheet" type="text/css" href="{% static 'sistema/css/dashboard.css' %}" />
-                <link rel="stylesheet" type="text/css" href="{% static 'sistema/css/style.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'sistema/css/style.css' %}" />
+        <script src="{% static 'sistema/js/jquery.min.js' %}"></script> 
+        <script src="{% static 'sistema/js/bootstrap.min.js' %}"></script> 
     </head> 
 
     <body>
@@ -26,9 +28,7 @@
           <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
               <li><a href="#">Dashboard</a></li>
-              <li><a href="#">Settings</a></li>
-              <li><a href="#">Profile</a></li>
-              <li><a href="#">Help</a></li>
+              <li><a href="#">Settings</a></li> 
             </ul>
             <form class="navbar-form navbar-right">
               <input type="text" class="form-control" placeholder="Search...">
@@ -56,8 +56,6 @@
         </div>
       </div>
 
-      <script src="{% static 'sistema/js/jquery.min.js' %}"></script> 
-      <script src="{% static 'sistema/js/bootstrap.min.js' %}"></script> 
     </body>
     
 </html>
