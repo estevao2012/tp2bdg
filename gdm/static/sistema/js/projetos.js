@@ -1,16 +1,18 @@
 $(document).ready(function(){
-  $('#conexao').modal() 
+  if(CONECTADO != "True")
+    $('#conexao').modal() 
 
-  $("#btnConectar").click(function(){
-    var dados = []; 
-    var formulario = $("#formularioConexao");
-    $.each(formulario.find('input'),function(index , elem){
-      ele = $(elem)
-      dados[ele.attr('name')] = ele.val();
-    });
-    console.log(dados)
-    $.post( formulario.attr('action'),dados ,function(data){
-      console.log(data);
-    });
+  $("body").on('click','#alterarConexao',function(){
+    $('#conexao').modal()     
   })
+  
+  $("#btnConectar").click(function(){
+    $("#formularioConexao").submit();
+  })
+  
+  $("form").ajaxSubmit(function(){
+
+  });
+
+
 })

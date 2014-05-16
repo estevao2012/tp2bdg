@@ -1,20 +1,36 @@
 {% extends "base.html" %}
 {% load static %}
+{% load gdm_extra %}
 
-{% block title-sidebar %}Projetos{% endblock %}
+
 
 {% block sidebar %}
-    {% if user %} 
-      {% for projeto in user.projeto_set.all %}
-          <li>
-            <a href="{% url 'sistema:consultas' projeto.id %}">
-              {{ projeto }}
-            </a> 
-          </li>
-      {% endfor %} 
-    {% else %}
-      <li>Projetos</li>
+    {% if conexao.conectado|is_conected %}
+      <h4>Sua conexão atual <a class="alterar" id="alterarConexao">Alterar</a></h4>
+      <p>Database: {{conexao.database}}</p>
+      <p>User: {{conexao.user}}</p> 
+      <p>Host: {{conexao.host}}</p>
     {% endif %}
+    
+
+    <h4>Projetos</h4>
+    <ul class="nav nav-sidebar">
+      {% if user %} 
+        {% for projeto in user.projeto_set.all %}
+            <li>
+              <a href="{% url 'sistema:consultas' projeto.id %}">
+                {{ projeto }}
+              </a> 
+            </li>
+        {% endfor %} 
+      {% else %}
+        <li>Projetos</li>
+      {% endif %}
+    </ul>
+
+
+
+
 {% endblock %}
 
 {% block content %}
@@ -37,7 +53,6 @@
   </div> 
 
 
-
   <div class="modal fade" id="conexao">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -50,11 +65,11 @@
         <div class="modal-body">
             
           <div class="conexao">
-            <form role="form" action="{% url 'sistema:conecta' %}" id="formularioConexao" method="post" data-remote=true>
+            <form role="form" action="{% url 'sistema:salva-conexao' %}" id="formularioConexao" method="post" data-remote=true>
               {% csrf_token %} 
               <div class="form-group">
                 <label>Banco de dados</label>
-                <input type="text" name="bd" class="form-control" />
+                <input type="text" name="database" class="form-control" />
               </div>
 
               <div class="form-group">
@@ -69,6 +84,9 @@
                 <label>Host</label>
                 <input type="text" name="host" class="form-control" />
               </div>
+
+              <input type="hidden" name="usuario_id" class="form-control" value="{{user.id}}"/>
+
             </form>  
           </div>
 
@@ -82,7 +100,7 @@
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
   </div><!-- /.modal -->
-
-
+  
+  <script type="text/javascript">var CONECTADO = "{{ conexao.conectado }}" ;</script>
   <script src="{%  static 'sistema/js/projetos.js' %}"></script>   
 {% endblock %}

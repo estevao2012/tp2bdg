@@ -1,7 +1,9 @@
 from django.views import generic
+from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.core import serializers
+from django.core.urlresolvers import reverse
 from django.utils import simplejson
 from sistema.models import Projeto
 from django.contrib.gis.geos import Point, GEOSGeometry
@@ -16,9 +18,10 @@ class IndexView(generic.ListView):
         return User.objects.all()
 
 
-class ProjetosView(generic.DetailView):
-    model = User
-    template_name = 'sistema/projetos.html'
+def projetos(request, user_id):
+    user = User.objects.get(pk=user_id)
+    conexao = request.session
+    return render(request, 'sistema/projetos.html', {"conexao": conexao})
 
 
 def consultas(request, projeto_id):
@@ -37,22 +40,32 @@ def consultas(request, projeto_id):
 
 
 #Pegar as variaveis POST e fazer conexao
-def conexaoSession(request):
-    try:
-        request.session['database'] = 'iniciante'
-        request.session['user'] = 'root'
-        request.session['password'] = 'root'
-        request.session['host'] = '127.0.0.1'
-        return HttpResponse('OK')
-    except Exception, e:
-        return HttpResponse(e)
+def salvaConexao(request):
+    user_id = request.POST.get('usuario_id')
 
+    try:
+        database = request.POST.get('database')
+        host_db = request.POST.get('host')
+        user_db = request.POST.get('user')
+        pass_db = request.POST.get('pass')
+
+        request.session['database'] = database
+        request.session['user'] = user_db
+        request.session['password'] = pass_db
+        request.session['host'] = host_db
+        request.session['conectado'] = True
+        return redirect(reverse('sistema:projetos', args=(user_id,)))
+    except Exception, e:
+        request.session['conectado'] = False
+        return redirect(reverse('sistema:projetos', args=(user_id,)))
 
 def customSelect(request):
 
+    consulta = request.POST.get('consulta')
+
     conn = psycopg2.connect(database="bdg", user="root", password="root", host="127.0.0.1")
     cursor = conn.cursor()
-    cursor.execute("select * from geodata.armazens")
+    cursor.execute(consulta)
     tudo = cursor.fetchall()
     tod = []
     for elem in tudo:
