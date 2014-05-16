@@ -2,11 +2,10 @@ from django.views import generic
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.core import serializers
-
+from django.utils import simplejson
 from sistema.models import Projeto
-
+from django.contrib.gis.geos import Point, GEOSGeometry
 import psycopg2
-import json
 
 
 class IndexView(generic.ListView):
@@ -23,27 +22,40 @@ class ProjetosView(generic.DetailView):
 
 
 def consultas(request, projeto_id):
-    response_data = Projeto.objects.get(pk=projeto_id).consulta_set.all()
-    data = serializers.serialize("json", response_data)
+    projeto = Projeto.objects.get(pk=projeto_id)
+    consultas = projeto.consulta_set.all()
+    to_json = {
+        'projeto': {
+            'nome': projeto.nome, 'id': projeto.id
+            }
+        }
+    to_json['consultas'] = serializers.serialize('json', consultas)
+
     return HttpResponse(
-        json.dumps(data), content_type="application/json"
+        simplejson.dumps(to_json, indent=4), mimetype="application/json"
         )
 
 
 #Pegar as variaveis POST e fazer conexao
 def conexaoSession(request):
-
-    return HttpResponse('OK')
+    try:
+        request.session['database'] = 'iniciante'
+        request.session['user'] = 'root'
+        request.session['password'] = 'root'
+        request.session['host'] = '127.0.0.1'
+        return HttpResponse('OK')
+    except Exception, e:
+        return HttpResponse(e)
 
 
 def customSelect(request):
 
-    conn = psycopg2.connect(database="iniciante", user="root", password="root", host="127.0.0.1")
+    conn = psycopg2.connect(database="bdg", user="root", password="root", host="127.0.0.1")
     cursor = conn.cursor()
-    cursor.execute("select * from visualize_choice")
+    cursor.execute("select * from geodata.armazens")
     tudo = cursor.fetchall()
     tod = []
     for elem in tudo:
-        tod.append(elem[2])
+        tod.append(GEOSGeometry(elem[8]).geojson)
 
-    return HttpResponse('<br>'.join(tod))
+    return HttpResponse(','.join(tod))

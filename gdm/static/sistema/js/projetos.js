@@ -12,6 +12,5 @@ $(document).ready(function(){
     $.post( formulario.attr('action'),dados ,function(data){
       console.log(data);
     });
-
   })
 })
