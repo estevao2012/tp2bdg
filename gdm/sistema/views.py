@@ -35,19 +35,9 @@ def projetos(request, user_id, projeto_id=0):
         {"conexao": conexao, "projeto": projeto})
 
 
-def consultas(request, projeto_id):
-    projeto = Projeto.objects.get(pk=projeto_id)
-    consultas = projeto.consulta_set.all()
-    to_json = {
-        'projeto': {
-            'nome': projeto.nome, 'id': projeto.id
-            }
-        }
-    to_json['consultas'] = serializers.serialize('json', consultas)
-
-    return HttpResponse(
-        simplejson.dumps(to_json, indent=4), mimetype="application/json"
-        )
+def consulta(request, consulta_id):
+    consulta = Consulta.objects.get(pk=consulta_id)
+    return generateGeoJson(consulta.consulta, request.session)
 
 
 #Pegar as variaveis POST e fazer conexao
@@ -83,11 +73,15 @@ def novaConsulta(request):
         data=datetime.date.today(),
         ordem=0)
     consulta_nova.save()
+    return generateGeoJson(consulta, request.session)
+
+
+def generateGeoJson(consulta, conexao):
     conn = psycopg2.connect(
-        database=request.session['database'],
-        user=request.session['user'],
-        password=request.session['password'],
-        host=request.session['host'])
+        database=conexao['database'],
+        user=conexao['user'],
+        password=conexao['password'],
+        host=conexao['host'])
     cursor = conn.cursor()
     cursor.execute(consulta)
     tudo = cursor.fetchall()
@@ -96,9 +90,7 @@ def novaConsulta(request):
         tod.append(GEOSGeometry(elem[8]).geojson)
 
     to_json = {
-        'projeto': {
-            'nome': projeto.nome, 'id': projeto_id
-            }
+        'consulta': consulta
         }
 
     to_json['resultado'] = tod

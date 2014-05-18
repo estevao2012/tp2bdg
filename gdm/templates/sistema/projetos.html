@@ -19,7 +19,7 @@
       {% if user %} 
         {% for projeto in user.projeto_set.all %}
             <li>
-              <a href="{% url 'sistema:consultas' projeto.id %}">
+              <a href="{% url 'sistema:projetos' user.id projeto.id %}">
                 {{ projeto }}
               </a> 
             </li>

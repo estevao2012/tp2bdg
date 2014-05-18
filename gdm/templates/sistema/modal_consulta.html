@@ -11,7 +11,7 @@
             
           <div class="conexao">
             
-            <form role="form" action="{% url 'sistema:consulta' %}" id="formularioConsulta" method="post" data-remote=true>
+            <form role="form" action="{% url 'sistema:salva-consulta' %}" id="formularioConsulta" method="post" data-remote=true>
               {% csrf_token %} 
 
               <div class="form-group">

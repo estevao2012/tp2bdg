@@ -5,7 +5,7 @@ urlpatterns = patterns('',
     url(r'^$', views.IndexView.as_view(), name='index'),
     url(r'^(?P<user_id>\d+)/projetos/$', views.projetos, name='projetos'),  # User Id Pk
     url(r'^(?P<user_id>\d+)/projetos/(?P<projeto_id>\d+)$', views.projetos, name='projetos'),  # User Id Pk
-    url(r'^(?P<projeto_id>\d+)/consultas/$', views.consultas, name='consultas'),  # Url Recebida por ajax
+    url(r'^consulta/(?P<consulta_id>\d+)$', views.consulta, name='consulta'),  # Url Recebida por ajax
     url(r'^salva-conexao/$', views.salvaConexao, name='salva-conexao'),
-    url(r'^consulta/$', views.novaConsulta, name='consulta'),  # Envia Consulta
+    url(r'^salva-consulta/$', views.novaConsulta, name='salva-consulta'),  # Envia Consulta
 )
