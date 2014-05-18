@@ -19,11 +19,20 @@ class IndexView(generic.ListView):
         return User.objects.all()
 
 
-def projetos(request, user_id):
+def projetos(request, user_id, projeto_id=0):
     user = User.objects.get(pk=user_id)
     conexao = request.session
-    projeto = user.projeto_set.first
-    return render(request, 'sistema/projetos.html', {"conexao": conexao, "projeto": projeto})
+    if(projeto_id == 0):
+        projeto = user.projeto_set.first
+    else:
+        try:
+            projeto = Projeto.objects.get(pk=projeto_id)
+        except Projeto.DoesNotExist:
+            return redirect(reverse('sistema:projetos', args=(user_id,)))
+    return render(
+        request,
+        'sistema/projetos.html',
+        {"conexao": conexao, "projeto": projeto})
 
 
 def consultas(request, projeto_id):
@@ -92,7 +101,7 @@ def novaConsulta(request):
             }
         }
 
-    to_json['consultas'] = tod
+    to_json['resultado'] = tod
 
     return HttpResponse(
         simplejson.dumps(to_json, indent=4), mimetype="application/json"

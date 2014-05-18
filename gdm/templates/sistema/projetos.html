@@ -41,7 +41,7 @@
     
 
     <div class="consultas">
-      {% for consulta in user.projeto_set.first.consulta_set.all %}
+      {% for consulta in projeto.consulta_set.all %}
         <li>
         {{ consulta }}
         </li>
