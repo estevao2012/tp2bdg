@@ -1,8 +1,7 @@
 Projeto de visualização de mapa usando python!
 G.D.M (Gerador De Mapas)
 
-#TODO#
-MAPEAR O OBJETO DE RETORNO DA CONSULTA
+#TODO# 
 TRATAR ERROS NA CONSULTA
 CRIAR OS MAPAS COM OPENLAYER
 	DESENVOLVER O OBJETO Maps.js
