@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import datetime
 
 
 # Create your models here.
@@ -22,3 +23,18 @@ class Consulta(models.Model):
 
     def __unicode__(self):
         return self.consulta
+
+    @classmethod
+    def create(cls, consulta, projeto, ordem):
+        consultas = cls.objects.filter(consulta=consulta, projeto_id=projeto)
+        if(consultas.count == 0):
+            consulta = cls(
+                consulta=consulta,
+                projeto_id=projeto,
+                ordem=ordem,
+                data=datetime.date.today())
+            consulta.save()
+        else:
+            consulta = consultas.first
+        return consulta
+

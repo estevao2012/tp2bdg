@@ -67,15 +67,11 @@ def novaConsulta(request):
     projeto_id = request.POST.get('projeto_id')
     salvar = request.POST.get('salva')
     projeto = Projeto.objects.get(pk=projeto_id)
-    consulta_nova = Consulta(
-        consulta=consulta,
-        projeto_id=projeto_id,
-        data=datetime.date.today(),
-        ordem=0)
-    consulta_nova.save()
+    consulta_nova = Consulta.create(consulta, projeto_id, 0)
     return generateGeoJson(consulta, request.session)
 
 
+# Metodo Helper Para Gerar o GeoJson
 def generateGeoJson(consulta, conexao):
     conn = psycopg2.connect(
         database=conexao['database'],
