@@ -5,9 +5,10 @@ from django.http import HttpResponse
 from django.core import serializers
 from django.core.urlresolvers import reverse
 from django.utils import simplejson
-from sistema.models import Projeto
+from sistema.models import Projeto, Consulta
 from django.contrib.gis.geos import Point, GEOSGeometry
 import psycopg2
+import datetime
 
 
 class IndexView(generic.ListView):
@@ -21,7 +22,8 @@ class IndexView(generic.ListView):
 def projetos(request, user_id):
     user = User.objects.get(pk=user_id)
     conexao = request.session
-    return render(request, 'sistema/projetos.html', {"conexao": conexao})
+    projeto = user.projeto_set.first
+    return render(request, 'sistema/projetos.html', {"conexao": conexao, "projeto": projeto})
 
 
 def consultas(request, projeto_id):
@@ -60,14 +62,23 @@ def salvaConexao(request):
         return redirect(reverse('sistema:projetos', args=(user_id,)))
 
 
-def customSelect(request):
+def novaConsulta(request):
 
     consulta = request.POST.get('consulta')
+    projeto_id = request.POST.get('projeto_id')
+    salvar = request.POST.get('salva')
+    projeto = Projeto.objects.get(pk=projeto_id)
+    consulta_nova = Consulta(
+        consulta=consulta,
+        projeto_id=projeto_id,
+        data=datetime.date.today(),
+        ordem=0)
+    consulta_nova.save()
     conn = psycopg2.connect(
-        database="bdg",
-        user="root",
-        password="root",
-        host="127.0.0.1")
+        database=request.session['database'],
+        user=request.session['user'],
+        password=request.session['password'],
+        host=request.session['host'])
     cursor = conn.cursor()
     cursor.execute(consulta)
     tudo = cursor.fetchall()
@@ -75,4 +86,14 @@ def customSelect(request):
     for elem in tudo:
         tod.append(GEOSGeometry(elem[8]).geojson)
 
-    return HttpResponse(','.join(tod))
+    to_json = {
+        'projeto': {
+            'nome': projeto.nome, 'id': projeto_id
+            }
+        }
+
+    to_json['consultas'] = tod
+
+    return HttpResponse(
+        simplejson.dumps(to_json, indent=4), mimetype="application/json"
+        )

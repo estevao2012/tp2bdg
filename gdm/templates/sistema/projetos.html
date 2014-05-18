@@ -5,10 +5,11 @@
 {% block sidebar %}
 
     {% if conexao.conectado|is_conected %}
-      <h4>Sua conexão atual <a class="alterar" id="alterarConexao">Alterar</a></h4>
+      <h4>Sua conexão atual</h4>
       <p>Database: {{conexao.database}}</p>
       <p>User: {{conexao.user}}</p> 
       <p>Host: {{conexao.host}}</p>
+      <button class="btn btn-primary" data-toggle="modal" data-target="#conexao">Alterar </button>
     {% endif %}
     
     <br />    
@@ -33,7 +34,11 @@
 {% block content %}
   <div id="content">
 
-    <h2>Projetos {{ user.projeto_set.first }}</h2>
+    <h2>
+      Projetos {{ projeto }}
+      &nbsp;&nbsp;&nbsp;<button class="btn btn-primary" data-toggle="modal" data-target="#consulta">Nova consulta </button>
+    </h2>
+    
 
     <div class="consultas">
       {% for consulta in user.projeto_set.first.consulta_set.all %}
@@ -49,10 +54,15 @@
 
   </div> 
 
+{% endblock %}
 
+{% block includes %} 
   {% include "sistema/modal_conexao.html" %} 
   {% include "sistema/modal_consulta.html" %} 
-  
-  <script type="text/javascript">var CONECTADO = "{{ conexao.conectado }}" ;</script>
+  <script type="text/javascript">
+    var CONECTADO = "{{ conexao.conectado }}" ;
+    var PROJETO = {{projeto.id}};
+  </script>
+  <script src="{%  static 'sistema/js/maps.js' %}"></script>   
   <script src="{%  static 'sistema/js/projetos.js' %}"></script>   
 {% endblock %}
