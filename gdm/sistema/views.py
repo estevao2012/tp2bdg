@@ -8,6 +8,7 @@ from django.utils import simplejson
 from sistema.models import Projeto, Consulta
 from django.contrib.gis.geos import Point, GEOSGeometry
 import psycopg2
+from psycopg2.extras import RealDictCursor
 import datetime
 
 
@@ -73,24 +74,29 @@ def novaConsulta(request):
 
 # Metodo Helper Para Gerar o GeoJson
 def generateGeoJson(consulta, conexao):
-    conn = psycopg2.connect(
-        database=conexao['database'],
-        user=conexao['user'],
-        password=conexao['password'],
-        host=conexao['host'])
-    cursor = conn.cursor()
+    credentials = {'host': conexao['host'],
+                   'database': conexao['database'],
+                   'user': conexao['user'],
+                   'password': conexao['password']}
+    conn = psycopg2.connect(**credentials)
+    cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     cursor.execute(consulta)
     tudo = cursor.fetchall()
-    tod = []
-    for elem in tudo:
-        tod.append(GEOSGeometry(elem[8]).geojson)
-
+    result = {}
     to_json = {
         'consulta': consulta
         }
-
-    to_json['resultado'] = tod
-
+    i = 0
+    for elem in tudo:
+        linhas = {}
+        for key, value in elem.items():
+            if key == 'geom':
+                linhas[key] = GEOSGeometry(value).geojson
+            else:
+                linhas[key] = value
+        result[str(i)] = linhas
+        i = i+1        
+    to_json['resultado'] = result
     return HttpResponse(
         simplejson.dumps(to_json, indent=4), mimetype="application/json"
         )

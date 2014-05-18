@@ -48,8 +48,7 @@
       {% endfor %}
     </div>
 
-    <div class="mapa">
-      MAPA
+    <div id="map" class="mapa smallmap olMap"> 
     </div>
 
   </div> 
@@ -62,7 +61,8 @@
   <script type="text/javascript">
     var CONECTADO = "{{ conexao.conectado }}" ;
     var PROJETO = {{projeto.id}};
-  </script>
+  </script> 
+  <script type="text/javascript" src="{%  static 'sistema/lib/OpenLayers.js' %}" />
   <script src="{%  static 'sistema/js/maps.js' %}"></script>   
   <script src="{%  static 'sistema/js/projetos.js' %}"></script>   
 {% endblock %}
