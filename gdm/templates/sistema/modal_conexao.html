@@ -1,29 +1,47 @@
+<div class="modal fade" id="conexao">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Conexão com servidor</h4>
+        </div>
 
-<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="conexao">
-    <form role="form">
-      <div class="form-group">
-        <label>Banco de dados</label>
-        <input type="text" name="bd" class="form-control" />
-      </div>
+        <div class="modal-body">
+            
+          <div class="conexao">
+            <form role="form" action="{% url 'sistema:salva-conexao' %}" id="formularioConexao" method="post" data-remote=true>
+              {% csrf_token %} 
+              <div class="form-group">
+                <label>Banco de dados</label>
+                <input type="text" name="database" class="form-control" />
+              </div>
 
-      <div class="form-group">
-        <label>Usuário</label>
-        <input type="text" name="user" class="form-control" />
-      </div>
-      <div class="form-group">
-        <label>Senha</label>
-        <input type="password" name="pass" class="form-control" />
-      </div>
-      <div class="form-group">
-        <label>Host</label>
-        <input type="text" name="host" class="form-control" />
-      </div>
-      <input type="submit" value="Conectar">
-    </form>  
-  </div>
-    </div>
-  </div>
-</div>
+              <div class="form-group">
+                <label>Usuário</label>
+                <input type="text" name="user" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label>Senha</label>
+                <input type="password" name="pass" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label>Host</label>
+                <input type="text" name="host" class="form-control" />
+              </div>
+
+              <input type="hidden" name="usuario_id" class="form-control" value="{{user.id}}"/>
+
+            </form>  
+          </div>
+
+        </div>
+        
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="btnConectar">Conectar</button>
+        </div>
+
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->

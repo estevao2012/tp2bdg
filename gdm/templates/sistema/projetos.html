@@ -1,10 +1,9 @@
 {% extends "base.html" %}
 {% load static %}
-{% load gdm_extra %}
-
-
+{% load gdm_extra %} 
 
 {% block sidebar %}
+
     {% if conexao.conectado|is_conected %}
       <h4>Sua conexão atual <a class="alterar" id="alterarConexao">Alterar</a></h4>
       <p>Database: {{conexao.database}}</p>
@@ -12,6 +11,7 @@
       <p>Host: {{conexao.host}}</p>
     {% endif %}
     
+    <br />    
 
     <h4>Projetos</h4>
     <ul class="nav nav-sidebar">
@@ -27,10 +27,7 @@
         <li>Projetos</li>
       {% endif %}
     </ul>
-
-
-
-
+ 
 {% endblock %}
 
 {% block content %}
@@ -53,53 +50,8 @@
   </div> 
 
 
-  <div class="modal fade" id="conexao">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title">Conexão com servidor</h4>
-        </div>
-
-        <div class="modal-body">
-            
-          <div class="conexao">
-            <form role="form" action="{% url 'sistema:salva-conexao' %}" id="formularioConexao" method="post" data-remote=true>
-              {% csrf_token %} 
-              <div class="form-group">
-                <label>Banco de dados</label>
-                <input type="text" name="database" class="form-control" />
-              </div>
-
-              <div class="form-group">
-                <label>Usuário</label>
-                <input type="text" name="user" class="form-control" />
-              </div>
-              <div class="form-group">
-                <label>Senha</label>
-                <input type="password" name="pass" class="form-control" />
-              </div>
-              <div class="form-group">
-                <label>Host</label>
-                <input type="text" name="host" class="form-control" />
-              </div>
-
-              <input type="hidden" name="usuario_id" class="form-control" value="{{user.id}}"/>
-
-            </form>  
-          </div>
-
-        </div>
-        
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="btnConectar">Conectar</button>
-        </div>
-
-      </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-  </div><!-- /.modal -->
+  {% include "sistema/modal_conexao.html" %} 
+  {% include "sistema/modal_consulta.html" %} 
   
   <script type="text/javascript">var CONECTADO = "{{ conexao.conectado }}" ;</script>
   <script src="{%  static 'sistema/js/projetos.js' %}"></script>   

@@ -59,11 +59,15 @@ def salvaConexao(request):
         request.session['conectado'] = False
         return redirect(reverse('sistema:projetos', args=(user_id,)))
 
+
 def customSelect(request):
 
     consulta = request.POST.get('consulta')
-
-    conn = psycopg2.connect(database="bdg", user="root", password="root", host="127.0.0.1")
+    conn = psycopg2.connect(
+        database="bdg",
+        user="root",
+        password="root",
+        host="127.0.0.1")
     cursor = conn.cursor()
     cursor.execute(consulta)
     tudo = cursor.fetchall()
