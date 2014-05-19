@@ -58,11 +58,17 @@
 {% block includes %} 
   {% include "sistema/modal_conexao.html" %} 
   {% include "sistema/modal_consulta.html" %} 
+
   <script type="text/javascript">
     var CONECTADO = "{{ conexao.conectado }}" ;
     var PROJETO = {{projeto.id}};
   </script> 
-  <script type="text/javascript" src="{%  static 'sistema/lib/OpenLayers.js' %}" />
+  <script type="text/javascript" src="{%  static 'sistema/lib/OpenLayers.js' %}" /></script>
+
+   
+  
   <script src="{%  static 'sistema/js/maps.js' %}"></script>   
   <script src="{%  static 'sistema/js/projetos.js' %}"></script>   
+
+
 {% endblock %}
