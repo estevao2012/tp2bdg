@@ -65,10 +65,11 @@ def salvaConexao(request):
 def novaConsulta(request):
 
     consulta = request.POST.get('consulta')
+    propriedades = request.POST.get('propriedades')
     projeto_id = request.POST.get('projeto_id')
     salvar = request.POST.get('salva')
     projeto = Projeto.objects.get(pk=projeto_id)
-    consulta_nova = Consulta.create(consulta, projeto_id, 0)
+    consulta_nova = Consulta.create(consulta, projeto_id, propriedades)
     return generateGeoJson(consulta, request.session)
 
 

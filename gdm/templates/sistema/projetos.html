@@ -43,7 +43,7 @@
     <div class="consultas">
       {% for consulta in projeto.consulta_set.all %}
         <li>
-        <a href="{% url 'sistema:consulta' consulta.id%}">{{ consulta }}</a>
+          <a href="{% url 'sistema:consulta' consulta.id%}">{{ consulta }}</a>
         </li>
       {% endfor %}
     </div>
@@ -68,7 +68,7 @@
    
   
   <script src="{%  static 'sistema/js/maps.js' %}"></script>   
-  <script src="{%  static 'sistema/js/projetos.js' %}"></script>   
+  <script src="{%  static 'sistema/js/projetos.js' %}"></script>
 
 
 {% endblock %}

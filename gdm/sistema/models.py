@@ -18,6 +18,7 @@ class Projeto(models.Model):
 class Consulta(models.Model):
     projeto = models.ForeignKey(Projeto)
     consulta = models.TextField()
+    propriedades = models.TextField(null=True)
     data = models.DateTimeField('date published')
     ordem = models.IntegerField()
 
@@ -25,11 +26,12 @@ class Consulta(models.Model):
         return self.consulta
 
     @classmethod
-    def create(cls, consulta, projeto, ordem):
+    def create(cls, consulta, projeto, propriedades='{}', ordem=0):
         consultas = cls.objects.filter(consulta=consulta, projeto_id=projeto)
         if(consultas.count == 0):
             consulta = cls(
                 consulta=consulta,
+                propriedades=propriedades,
                 projeto_id=projeto,
                 ordem=ordem,
                 data=datetime.date.today())
