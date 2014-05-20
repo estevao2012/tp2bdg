@@ -35,22 +35,21 @@
   <div id="content">
 
     <h2>
-      Projetos {{ projeto }}
+      Projeto {{ projeto }}
     </h2>
     
 
-    <div class="consultas col-md-10">
+    <div class="consultas col-md-4">
       <ul class="nav nav-pills">
         {% for consulta in projeto.consulta_set.all %}
           <li>
             <a data-href="{% url 'sistema:consulta' consulta.id%}" class="active" data-name="{{ consulta }}" >{{ consulta }}</a>
           </li>
         {% endfor %}
-      </ul>
-      <!-- <button class="btn btn-primary" data-toggle="modal" data-target="#consulta">Nova consulta </button> -->
+      </ul> 
     </div>
 
-    <div class="col-md-10">
+    <div class="col-md-8">
       <div id="map" class="mapa smallmap olMap "> 
       </div>
     </div>

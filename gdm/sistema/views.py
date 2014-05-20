@@ -41,6 +41,7 @@ def consulta(request, consulta_id):
     return generateGeoJson(
         consulta.consulta,
         consulta.propriedades,
+        consulta.id,
         request.session)
 
 
@@ -78,12 +79,13 @@ def novaConsulta(request):
 
     return generateGeoJson(
         consulta,
-        consulta_nova.propriedades,
+        propriedades,
+        consulta_nova.id,
         request.session)
 
 
 # Metodo Helper Para Gerar o GeoJson
-def generateGeoJson(consulta, propriedades, conexao):
+def generateGeoJson(consulta, propriedades, consulta_id, conexao):
     credentials = {'host': conexao['host'],
                    'database': conexao['database'],
                    'user': conexao['user'],
@@ -94,6 +96,7 @@ def generateGeoJson(consulta, propriedades, conexao):
     tudo = cursor.fetchall()
     result = {}
     to_json = {
+        'id': consulta_id,
         'consulta': consulta,
         'propriedades': propriedades
         }

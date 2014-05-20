@@ -29,13 +29,15 @@ function Maps(mapa){
     return map.layers;
   }
   self.novaCamada = function(nomecamada, geojson, propriedades, ordem){
-    var prop = {fillColor: '#c9c9c9',
+    var prop = {
+                fillColor: '#c9c9c9',
                 externalGraphic: '/static/sistema/img/marker.png',
                 graphicWidth: 20,
                 graphicHeight: 24,
                 graphicYOffset: -24,
                 'strokeWidth': 1,
-                fillOpacity: 0.9};
+                fillOpacity: 0.9
+            };
     $.extend(prop,propriedades);
 
     var featurecollection = {
@@ -50,17 +52,30 @@ function Maps(mapa){
           "name": "Coors Field"
         }
       }]
-    };
-    // console.log(geojson);
+    }; 
  
     var geojson_format = new OpenLayers.Format.GeoJSON();
     var styleMap = new OpenLayers.StyleMap(prop);
-    var vector_layer = new OpenLayers.Layer.Vector(nomecamada, { styleMap: styleMap});  
+    var vector_layer = new OpenLayers.Layer.Vector(nomecamada, { styleMap: styleMap , rendererOptions: {yOrdering: true}});  
 
     map.addLayer(vector_layer); 
     vector_layer.addFeatures(geojson_format.read(featurecollection) );
 
-    map.setLayerIndex(vector_layer, 0);
+    map.setLayerIndex(vector_layer, ordem);
+
+    // var highlightCtrl = new OpenLayers.Control.SelectFeature(vector_layer, {
+    //     hover: true,
+    //     highlightOnly: true,
+    //     renderIntent: "temporary", 
+    // });
+
+    // var selectCtrl = new OpenLayers.Control.SelectFeature(vector_layer,
+    //     {clickout: true}
+    // );
+
+    // map.addControl(highlightCtrl);
+    // map.addControl(selectCtrl);
+
 
   } 
 
