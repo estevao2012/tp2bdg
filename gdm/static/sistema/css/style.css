@@ -3,3 +3,6 @@
   height: 400px; 
   margin: 10px 0 0; 
 }
+.nav-pills li,.nav-pills li.disabled , .nav-pills li a{
+  cursor: pointer !important;
+}

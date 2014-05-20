@@ -15,17 +15,57 @@ $(document).ready(function(){
   })
  
  
-  // var cordenadas = { "type": "Point", "coordinates": [ -60.639283446655206, -13.474461590980399 ] }; 
+  
+  
   var map = new Maps('map');
   map.setBaseLayer("http://vmap0.tiles.osgeo.org/wms/vmap0",{layers: 'basic'});  
   
-  // var propriedades = {fillColor: "#ff0000"} 
-  // map.novaCamada('Ponto Teste', cordenadas, propriedades);
-  getConsultasProntas();
+  allActivesLayers(map); 
+  
+  $(".consultas li a").click(function(){
+    toggleCamada(map, $(this));
+    $(this).closest('li').toggleClass('disabled');
+    $(this).toggleClass('disabled');
+  })
 }) 
+ 
+function allActivesLayers(map){
+  i=0
+  $('.consultas li:not(.disabled)').each(function(){
 
-function getConsultasProntas(){
-  url = $('.consultas li:first a').attr('href');
-  console.log(url);
-  // $.get('')
+    var link = $(this).find('a');
+    url = link.data('href');  
+    
+    $.getJSON(url,function(json){
+
+      todosgeos = [];
+      
+      $.each(json.resultado, function(i,v){  
+        todosgeos.push($.parseJSON(v.geom))
+      });  
+
+      map.novaCamada(link.data('name'), todosgeos , $.parseJSON(json.propriedades) , i );
+
+    });
+     
+    i++
+  });
+
+  
+}
+
+function toggleCamada(map,name)
+{ 
+
+  var mLayers = map.getLayers(); 
+  var hideShow = false;
+  if(name.hasClass('disabled'))
+    hideShow = true;
+
+  for(var a = 0; a < mLayers.length; a++ ){
+
+    if(mLayers[a].name == name.data('name')) 
+        map.toggleCamada(mLayers[a],hideShow);
+
+  };
 }

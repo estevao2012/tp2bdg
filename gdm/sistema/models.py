@@ -25,10 +25,13 @@ class Consulta(models.Model):
     def __unicode__(self):
         return self.consulta
 
+    class Meta:
+        ordering = ['-ordem']
+
     @classmethod
-    def create(cls, consulta, projeto, propriedades='{}', ordem=0):
+    def create(cls, consulta, projeto, propriedades, ordem):
         consultas = cls.objects.filter(consulta=consulta, projeto_id=projeto)
-        if(consultas.count == 0):
+        if(consultas.count() == 0):
             consulta = cls(
                 consulta=consulta,
                 propriedades=propriedades,

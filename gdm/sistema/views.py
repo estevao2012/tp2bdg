@@ -38,7 +38,10 @@ def projetos(request, user_id, projeto_id=0):
 
 def consulta(request, consulta_id):
     consulta = Consulta.objects.get(pk=consulta_id)
-    return generateGeoJson(consulta.consulta, request.session)
+    return generateGeoJson(
+        consulta.consulta,
+        consulta.propriedades,
+        request.session)
 
 
 #Pegar as variaveis POST e fazer conexao
@@ -68,13 +71,19 @@ def novaConsulta(request):
     propriedades = request.POST.get('propriedades')
     projeto_id = request.POST.get('projeto_id')
     salvar = request.POST.get('salva')
+
     projeto = Projeto.objects.get(pk=projeto_id)
-    consulta_nova = Consulta.create(consulta, projeto_id, propriedades)
-    return generateGeoJson(consulta, request.session)
+
+    consulta_nova = Consulta.create(consulta, projeto_id, propriedades, 0)
+
+    return generateGeoJson(
+        consulta,
+        consulta_nova.propriedades,
+        request.session)
 
 
 # Metodo Helper Para Gerar o GeoJson
-def generateGeoJson(consulta, conexao):
+def generateGeoJson(consulta, propriedades, conexao):
     credentials = {'host': conexao['host'],
                    'database': conexao['database'],
                    'user': conexao['user'],
@@ -85,7 +94,8 @@ def generateGeoJson(consulta, conexao):
     tudo = cursor.fetchall()
     result = {}
     to_json = {
-        'consulta': consulta
+        'consulta': consulta,
+        'propriedades': propriedades
         }
     i = 0
     for elem in tudo:
